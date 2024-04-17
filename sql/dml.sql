@@ -15,7 +15,6 @@ VALUES
     (1, 'weight loss', 10, '2023-04-01', '2023-06-01'),
     (2, 'strength gain', 20, '2023-04-15', '2023-06-03'),
     (3, 'Improve endurance', 10, '2023-03-22', '2023-04-05'); 
--- Note the use of NULLs in appropriate fields 
 
 INSERT INTO health_metrics (member_id, metric_type, value, date_recorded)
 VALUES
@@ -83,23 +82,22 @@ INSERT INTO equipment (equipment_name, equipment_type, operational, room_id) VAL
 ('Cable Crossover Machine', 'Strength', false, 1);
 
 INSERT INTO maintenance_logs (equipment_id, maintenance_date, maintenance_description) VALUES
-(1, '2024-04-01', 'Belt replacement'),
-(1, '2024-06-01', 'Lubrication of moving parts'),
-(2, '2024-04-15', 'Handle repair'),
-(2, '2024-07-01', 'Electrical checkup'),
-(3, '2024-05-01', 'Seat adjustment'),
-(3, '2024-08-01', 'Pedal replacement'),
-(4, '2024-04-20', 'Chain lubrication'),
-(4, '2024-07-15', 'General maintenance'),
-(5, '2024-05-10', 'Safety check'),
-(5, '2024-08-20', 'Weight stack lubrication'),
-(6, '2024-04-30', 'Barbell maintenance'),
-(6, '2024-07-30', 'Rack inspection'),
-(7, '2024-05-15', 'Bench padding replacement'),
-(7, '2024-08-25', 'Paint touch-up'),
-(8, '2024-06-05', 'Dumbbell inspection'),
-(8, '2024-09-05', 'Rubber grip replacement'),
-(9, '2024-06-10', 'Kettlebell cleaning'),
-(9, '2024-09-10', 'Weight verification'),
-(10, '2024-05-20', 'Cable replacement'),
-(10, '2024-08-30', 'Pulley maintenance');
+(1, '2024-01-01', 'Belt replacement'),
+(1, '2024-02-01', 'Lubrication of moving parts'),
+(2, '2024-03-15', 'Handle repair'),
+(2, '2024-01-01', 'Electrical checkup'),
+(3, '2024-03-01', 'Seat adjustment'),
+(3, '2024-02-01', 'Pedal replacement'),
+(4, '2024-01-20', 'Chain lubrication'),
+(4, '2024-02-15', 'General maintenance'),
+(5, '2024-01-10', 'Safety check'),
+(5, '2024-02-20', 'Weight stack lubrication'),
+(6, '2024-03-30', 'Barbell maintenance'),
+(6, '2024-01-30', 'Rack inspection'),
+(7, '2024-02-15', 'Bench padding replacement'),
+(8, '2024-01-05', 'Dumbbell inspection'),
+(8, '2024-02-05', 'Rubber grip replacement'),
+(9, '2024-03-10', 'Kettlebell cleaning'),
+(9, '2024-04-10', 'Weight verification'),
+(10, '2024-01-20', 'Cable replacement'),
+(10, '2024-01-30', 'Pulley maintenance');

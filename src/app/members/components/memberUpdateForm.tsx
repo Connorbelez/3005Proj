@@ -27,6 +27,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/use-toast"
 import { updatePersonalInfo } from "@/app/actions/members"
+import { memberUpdate } from "@/db/types"
 
 
 
@@ -85,15 +86,16 @@ export function ProfileForm({ memberId }: { memberId: number }) {
         </pre>
       ),
     })
-    const memberUpdate = {
-      firstName: data.firstName,
-      lastName: data.lastName,
+    const memberUpdate: memberUpdate= {
+      first_name: data.firstName,
+      last_name: data.lastName,
+      member_id:memberId,
       email: data.email,
       // bio: data.bio,
       password: data.password
     }
     console.log("Member Update: ", memberUpdate)
-    updatePersonalInfo(memberUpdate, memberId);
+    updatePersonalInfo(memberUpdate)
 
     }
 
@@ -122,7 +124,7 @@ export function ProfileForm({ memberId }: { memberId: number }) {
           name="lastName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>firstName</FormLabel>
+              <FormLabel>last name</FormLabel>
               <FormControl>
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
@@ -139,22 +141,12 @@ export function ProfileForm({ memberId }: { memberId: number }) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a verified email to display" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
-                </SelectContent>
-              </Select>
+              <FormLabel>email</FormLabel>
+              <FormControl>
+                <Input placeholder="g@gmail.com" {...field} />
+              </FormControl>
               <FormDescription>
-                You can manage verified email addresses in your{" "}
-                <Link href="/examples/forms">email settings</Link>.
+              email 
               </FormDescription>
               <FormMessage />
             </FormItem>

@@ -86,6 +86,9 @@ export default async function Page({ params }: { params: { memId: number } }) {
       Amount: <span className="font-normal text-gray-600">{bill.amount}</span>
     </p>
     <p className="font-bold text-lg">
+      Member: <span className="font-normal text-gray-600">{bill.member_id}</span>
+    </p>
+    <p className="font-bold text-lg">
       Service Type: <span className="font-normal text-gray-600">{bill.service_type}</span>
     </p>
     <p className="font-bold text-lg">
@@ -94,7 +97,7 @@ export default async function Page({ params }: { params: { memId: number } }) {
   </div>
   <div className="flex-1">
     <p className="font-bold text-lg">
-      Payment Date: <span className="font-normal text-gray-600">{(bill.payment_date as Date).toString()}</span>
+      Payment Date: <span className="font-normal text-gray-600">{(bill.payment_date as Date).getDate().toString()}</span>
     </p>
   </div>
 </div>

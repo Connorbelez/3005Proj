@@ -93,7 +93,7 @@ export async function getAllMembers(): Promise<member[]> {
 import { memberUpdate } from "@/db/types"
 
 export async function updatePersonalInfo(
-  partialMember: memberUpdate, member_id: number
+  partialMember: memberUpdate
 ): Promise<BigInt | undefined> {
   const member = await db
     .updateTable("members")
