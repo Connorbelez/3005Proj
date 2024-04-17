@@ -5,11 +5,7 @@ BEGIN
     IF TG_OP = 'INSERT' THEN
         INSERT INTO bookings (class_id, room_id, start_time, end_time)
         VALUES (NEW.class_id, NEW.room_id, NEW.start_time, NEW.end_time);
-        -- When a new class is added, you might want to initialize related bookings
-        -- This part might need customization based on your application logic
-        -- Currently, no action is taken on insert because it's unclear what should happen without further context
     ELSIF TG_OP = 'UPDATE' THEN
-        -- Update related bookings to reflect changes in the class
         UPDATE bookings
         SET room_id = NEW.room_id,
             start_time = NEW.start_time,
