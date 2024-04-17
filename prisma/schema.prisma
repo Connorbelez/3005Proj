@@ -1,0 +1,210 @@
+generator kysely {
+  provider     = "prisma-kysely"
+  output       = "../src/db"
+  fileName     = "types.ts"
+  enumFileName = "enums.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model fitness_goals {
+  goal_id      Int       @id @default(autoincrement())
+  member_id    Int?
+  goal_type    String    @db.VarChar(50)
+  target_value Decimal   @db.Decimal
+  start_date   DateTime  @db.Date
+  end_date     DateTime? @db.Date
+  members      members?  @relation(fields: [member_id], references: [member_id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model health_metrics {
+  metric_id     Int      @id @default(autoincrement())
+  member_id     Int?
+  metric_type   String   @db.VarChar(50)
+  value         Decimal  @db.Decimal
+  date_recorded DateTime @db.Date
+  members       members? @relation(fields: [member_id], references: [member_id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model members {
+  member_id                  Int                          @id @default(autoincrement())
+  first_name                 String                       @db.VarChar(50)
+  last_name                  String                       @db.VarChar(50)
+  email                      String                       @unique @db.VarChar(100)
+  password                   String                       @db.VarChar(255)
+  join_date                  DateTime                     @db.Date
+  member_status              String?                      @db.VarChar(20)
+  billing                    billing[]
+  class_registrations        class_registrations[]
+  fitness_achievments        fitness_achievments[]
+  fitness_goals              fitness_goals[]
+  health_metrics             health_metrics[]
+  member_routines            member_routines[]
+  personal_training_sessions personal_training_sessions[]
+}
+
+model rooms {
+  room_id   Int         @id @default(autoincrement())
+  room_name String      @db.VarChar(50)
+  capacity  Int
+  bookings  bookings[]
+  classes   classes[]
+  equipment equipment[]
+}
+
+model trainers {
+  trainer_id                 Int                          @id @default(autoincrement())
+  first_name                 String                       @db.VarChar(50)
+  last_name                  String                       @db.VarChar(50)
+  email                      String                       @unique @db.VarChar(100)
+  password                   String                       @db.VarChar(255)
+  certification              String?                      @db.VarChar(100)
+  classes                    classes[]
+  payroll                    payroll[]
+  personal_training_sessions personal_training_sessions[]
+  trainer_availability       trainer_availability[]
+}
+
+model fitness_achievments {
+  achievement_id   Int       @id @default(autoincrement())
+  member_id        Int?
+  achievement_type String    @db.VarChar(50)
+  target_value     Decimal   @db.Decimal
+  achievement_date DateTime? @db.Date
+  members          members?  @relation(fields: [member_id], references: [member_id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model equipment {
+  equipment_id     Int                @id @default(autoincrement())
+  equipment_name   String             @db.VarChar(50)
+  equipment_type   String             @db.VarChar(50)
+  operational      Boolean
+  room_id          Int?
+  rooms            rooms?             @relation(fields: [room_id], references: [room_id], onUpdate: NoAction)
+  maintenance_logs maintenance_logs[]
+}
+
+model excercise_routine {
+  routine_id          Int               @id @default(autoincrement())
+  routine_name        String            @db.VarChar(50)
+  routine_description String?           @db.VarChar(256)
+  routine_type        String            @db.VarChar(50)
+  routine             Json              @db.Json
+  difficulty_level    Decimal           @db.Decimal
+  member_routines     member_routines[]
+}
+
+model maintenance_logs {
+  log_id                  Int        @id @default(autoincrement())
+  equipment_id            Int?
+  maintenance_date        DateTime   @db.Date
+  maintenance_description String?
+  equipment               equipment? @relation(fields: [equipment_id], references: [equipment_id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model member_routines {
+  member_routine_id Int                @id @default(autoincrement())
+  member_id         Int?
+  routine_id        Int?
+  members           members?           @relation(fields: [member_id], references: [member_id], onDelete: Cascade, onUpdate: NoAction)
+  excercise_routine excercise_routine? @relation(fields: [routine_id], references: [routine_id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model bookings {
+  booking_id Int      @id @default(autoincrement())
+  class_id   Int?
+  room_id    Int?
+  start_time DateTime @db.Timestamp(6)
+  end_time   DateTime @db.Timestamp(6)
+  classes    classes? @relation(fields: [class_id], references: [class_id], onDelete: Cascade, onUpdate: NoAction)
+  rooms      rooms?   @relation(fields: [room_id], references: [room_id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model class_registrations {
+  registration_id Int      @id @default(autoincrement())
+  member_id       Int?
+  class_id        Int?
+  classes         classes? @relation(fields: [class_id], references: [class_id], onDelete: Cascade, onUpdate: NoAction)
+  members         members? @relation(fields: [member_id], references: [member_id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model classes {
+  class_id            Int                   @id @default(autoincrement())
+  class_name          String                @db.VarChar(50)
+  room_id             Int?
+  trainer_id          Int?
+  start_time          DateTime              @db.Timestamp(6)
+  end_time            DateTime              @db.Timestamp(6)
+  capacity            Int
+  bookings            bookings[]
+  class_registrations class_registrations[]
+  rooms               rooms?                @relation(fields: [room_id], references: [room_id], onUpdate: NoAction)
+  trainers            trainers?             @relation(fields: [trainer_id], references: [trainer_id], onUpdate: NoAction)
+}
+
+model personal_training_sessions {
+  session_id Int       @id @default(autoincrement())
+  member_id  Int?
+  trainer_id Int?
+  start_time DateTime  @db.Timestamp(6)
+  end_time   DateTime  @db.Timestamp(6)
+  members    members?  @relation(fields: [member_id], references: [member_id], onDelete: Cascade, onUpdate: NoAction)
+  trainers   trainers? @relation(fields: [trainer_id], references: [trainer_id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model trainer_availability {
+  availability_id Int       @id @default(autoincrement())
+  trainer_id      Int?
+  start_time      DateTime  @db.Timestamp(6)
+  end_time        DateTime  @db.Timestamp(6)
+  trainers        trainers? @relation(fields: [trainer_id], references: [trainer_id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model admin {
+  admin_id   Int    @id @default(autoincrement())
+  first_name String @db.VarChar(50)
+  last_name  String @db.VarChar(50)
+  email      String @unique @db.VarChar(100)
+  password   String @db.VarChar(255)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model billing {
+  bill_id      Int       @id @default(autoincrement())
+  member_id    Int
+  service_type String    @db.VarChar(50)
+  amount       Decimal   @db.Decimal(10, 2)
+  payment_date DateTime? @db.Date
+  status       String    @db.VarChar(20)
+  members      members   @relation(fields: [member_id], references: [member_id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model payroll {
+  payment_id   Int      @id @default(autoincrement())
+  employee_id  Int
+  payment_type String   @db.VarChar(50)
+  amount       Decimal  @db.Decimal(10, 2)
+  payment_date DateTime @db.Date
+  period_start DateTime @db.Date
+  period_end   DateTime @db.Date
+  description  String?
+  trainers     trainers @relation(fields: [employee_id], references: [trainer_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([employee_id], map: "idx_payroll_employee")
+  @@index([payment_date], map: "idx_payroll_payment_date")
+  @@index([period_start, period_end], map: "idx_payroll_period")
+}
+
+enum day_of_week {
+  mon
+  tue
+  wed
+  thu
+  fri
+  sat
+  sun
+}
