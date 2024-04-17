@@ -23,18 +23,17 @@ CREATE TABLE members (
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL, -- securely store hashed passwords 
+    password VARCHAR(255) NOT NULL, 
     join_date DATE NOT NULL,
     member_status VARCHAR(20) CHECK (member_status IN ('active', 'suspended', 'inactive')) 
 );
 
--- Trainers Table
 CREATE TABLE trainers (
     trainer_id SERIAL PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL, -- securely store hashed passwords 
+    password VARCHAR(255) NOT NULL, 
     certification VARCHAR(100) 
 );
 
@@ -43,13 +42,12 @@ CREATE TABLE admin (
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL  -- securely store hashed passwords 
+    password VARCHAR(255) NOT NULL  
 );
--- Fitness Goals Table
 CREATE TABLE fitness_goals (
     goal_id SERIAL PRIMARY KEY,
     member_id INTEGER REFERENCES members(member_id) ON DELETE CASCADE,
-    goal_type VARCHAR(50) NOT NULL, -- Example: 'weight loss', 'strength gain'
+    goal_type VARCHAR(50) NOT NULL, 
     target_value NUMERIC NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE 
@@ -58,7 +56,7 @@ CREATE TABLE fitness_goals (
 CREATE TABLE fitness_achievments (
     achievement_id SERIAL PRIMARY KEY,
     member_id INTEGER REFERENCES members(member_id) ON DELETE CASCADE,
-    achievement_type VARCHAR(50) NOT NULL, -- Example: 'weight loss', 'strength gain'
+    achievement_type VARCHAR(50) NOT NULL, 
     target_value NUMERIC NOT NULL,
     achievement_date DATE 
 );
@@ -67,7 +65,7 @@ create table excercise_routine (
     routine_id SERIAL primary key,
     routine_name VARCHAR(50) NOT NULL, 
     routine_description VARCHAR(256),
-    routine_type VARCHAR(50) NOT NULL, -- ie cardio, weightlifting
+    routine_type VARCHAR(50) NOT NULL,
     routine JSON NOT NULL,
     difficulty_level NUMERIC NOT NULL 
 );
@@ -79,11 +77,10 @@ create table member_routines (
 );
 
 
--- Health Metrics Table
 CREATE TABLE health_metrics (
     metric_id SERIAL PRIMARY KEY,
     member_id INTEGER REFERENCES members(member_id) ON DELETE CASCADE,
-    metric_type VARCHAR(50) NOT NULL, -- Example: 'weight', 'blood pressure'
+    metric_type VARCHAR(50) NOT NULL, 
     value NUMERIC NOT NULL,
     date_recorded DATE NOT NULL 
 );
@@ -93,7 +90,6 @@ CREATE TABLE rooms (
     capacity INTEGER NOT NULL
 );
 
--- Classes Table
 CREATE TABLE classes (
     class_id SERIAL PRIMARY KEY,
     class_name VARCHAR(50) NOT NULL,
@@ -113,13 +109,11 @@ CREATE TABLE personal_training_sessions (
     end_time TIMESTAMP NOT NULL 
 );
 
--- Trainer Availability Table - Work hours for trainers
 CREATE TABLE trainer_availability (
     availability_id SERIAL PRIMARY KEY,
     trainer_id INTEGER REFERENCES trainers(trainer_id) ON DELETE CASCADE,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL
-    -- day_of_week VARCHAR(50) NOT NULL -- enum mon, tue, wed, thu, fri, sat, sun
 );
 
 
@@ -132,14 +126,12 @@ CREATE TABLE bookings (
     end_time TIMESTAMP NOT NULL 
 );
 
--- Class Registration Table 
 CREATE TABLE class_registrations (
     registration_id SERIAL PRIMARY KEY,
     member_id INTEGER REFERENCES members(member_id) ON DELETE CASCADE,
     class_id INTEGER REFERENCES classes(class_id) ON DELETE CASCADE
 );
 
--- Table for equipment/machines 
 CREATE TABLE equipment (
     equipment_id SERIAL PRIMARY KEY,
     equipment_name VARCHAR(50) NOT NULL,
@@ -148,7 +140,6 @@ CREATE TABLE equipment (
     room_id INTEGER REFERENCES rooms(room_id) ON DELETE SET NULL
 );
 
--- Table for equipment maintenance logs
 CREATE TABLE maintenance_logs (
     log_id SERIAL PRIMARY KEY,
     equipment_id INTEGER REFERENCES equipment(equipment_id) ON DELETE CASCADE,
@@ -159,9 +150,9 @@ CREATE TABLE maintenance_logs (
 CREATE TABLE billing (
     bill_id SERIAL PRIMARY KEY,
     member_id INTEGER NOT NULL REFERENCES members(member_id) ON DELETE CASCADE,
-    service_type VARCHAR(50) NOT NULL,  -- Describes the type of service billed
-    amount DECIMAL(10, 2) NOT NULL,  -- Represents the total amount due
-    payment_date DATE,  -- The actual date of payment (NULL if not paid)
+    service_type VARCHAR(50) NOT NULL, 
+    amount DECIMAL(10, 2) NOT NULL, 
+    payment_date DATE,  
     status VARCHAR(20) CHECK (status IN ('pending', 'paid', 'overdue')) NOT NULL
 );
 
